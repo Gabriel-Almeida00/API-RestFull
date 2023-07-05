@@ -48,7 +48,7 @@ public class MathController {
     }
 
     @RequestMapping(value = "/div/{numberOne}/{numberTwo}", method = RequestMethod.GET)
-    public Double iv(@PathVariable(value = "numberOne") String numberOne,
+    public Double div(@PathVariable(value = "numberOne") String numberOne,
                       @PathVariable(value = "numberTwo") String numberTwo
     ) throws Exception {
 
@@ -56,6 +56,27 @@ public class MathController {
             throw new UnsupportedMathOperationException("Please set a numeric value");
         }
         return convertToDouble(numberOne) / convertToDouble(numberTwo);
+    }
+
+    @RequestMapping(value = "/media/{numberOne}/{numberTwo}", method = RequestMethod.GET)
+    public Double media(@PathVariable(value = "numberOne") String numberOne,
+                     @PathVariable(value = "numberTwo") String numberTwo
+    ) throws Exception {
+
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+            throw new UnsupportedMathOperationException("Please set a numeric value");
+        }
+        return (convertToDouble(numberOne) + convertToDouble(numberTwo)) / 2;
+    }
+
+    @RequestMapping(value = "/raiz/{numberOne}", method = RequestMethod.GET)
+    public Double raiz(@PathVariable(value = "numberOne") String numberOne
+    ) throws Exception {
+
+        if (!isNumeric(numberOne)) {
+            throw new UnsupportedMathOperationException("Please set a numeric value");
+        }
+        return Math.sqrt(convertToDouble(numberOne));
     }
 
     private Double convertToDouble(String Snumber) {
