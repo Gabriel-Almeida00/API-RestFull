@@ -23,10 +23,17 @@ public class MathController {
         return convertToDouble(numberOne) + convertToDouble(numberTwo);
     }
 
-    private Double convertToDouble(String number) {
+    private Double convertToDouble(String Snumber) {
+        if(Snumber == null) return 0D;
+        String number = Snumber.replaceAll(",",".");
+        if(isNumeric(number)) return Double.parseDouble(number);
+        return 0D;
     }
 
-    private boolean isNumeric(String number) {
+    private boolean isNumeric(String Snumber) {
+        if(Snumber == null) return false;
+        String number = Snumber.replaceAll(",",".");
+        return number.matches("[-+]?[0-9]*\\.?[0-9]+");
     }
 
 }
