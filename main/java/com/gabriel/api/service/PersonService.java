@@ -43,7 +43,7 @@ public class PersonService {
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
 
-        return personRepository.save(person);
+        return personRepository.save(entity);
     }
 
     public void delete(Long id) {
