@@ -1,6 +1,7 @@
 package com.gabriel.api.service;
 
 import com.gabriel.api.data.vo.v1.PersonVO;
+import com.gabriel.api.data.vo.v2.PersonVOv2;
 import com.gabriel.api.exceptions.ResourceNotFoundException;
 import com.gabriel.api.model.Person;
 import com.gabriel.api.repository.PersonRepository;
@@ -35,6 +36,13 @@ public class PersonService {
         logger.info("Creating person");
         var entity = Mapper.parseObjetc(personVo, Person.class);
         var vo = Mapper.parseObjetc(personRepository.save(entity), PersonVO.class);
+        return vo;
+    }
+
+    public PersonVOv2 create(PersonVOv2 personVo) {
+        logger.info("Creating person with v2");
+        var entity = Mapper.parseObjetc(personVo, Person.class);
+        var vo = Mapper.parseObjetc(personRepository.save(entity), PersonVOv2.class);
         return vo;
     }
 
