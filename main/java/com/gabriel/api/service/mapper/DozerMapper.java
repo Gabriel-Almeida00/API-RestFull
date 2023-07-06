@@ -1,4 +1,4 @@
-package com.gabriel.api.mapper;
+package com.gabriel.api.service.mapper;
 
 import com.github.dozermapper.core.DozerBeanMapper;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
