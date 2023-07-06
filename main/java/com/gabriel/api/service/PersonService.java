@@ -6,6 +6,7 @@ import com.gabriel.api.exceptions.ResourceNotFoundException;
 import com.gabriel.api.model.Person;
 import com.gabriel.api.repository.PersonRepository;
 import com.gabriel.api.service.mapper.Mapper;
+import com.gabriel.api.service.mapper.custom.PersonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class PersonService {
 
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private PersonMapper personMapper;
 
     public PersonVO findById(Long id) {
         logger.info("Finding one person!");
@@ -39,10 +43,10 @@ public class PersonService {
         return vo;
     }
 
-    public PersonVOv2 create(PersonVOv2 personVo) {
+    public PersonVOv2 createv2(PersonVOv2 personVo) {
         logger.info("Creating person with v2");
-        var entity = Mapper.parseObjetc(personVo, Person.class);
-        var vo = Mapper.parseObjetc(personRepository.save(entity), PersonVOv2.class);
+        var entity = personMapper.convertVoToEntity(personVo);
+        var vo = personMapper.convertEntityToVO(personRepository.save(entity));
         return vo;
     }
 
