@@ -4,7 +4,7 @@ import com.gabriel.api.data.vo.v1.PersonVO;
 import com.gabriel.api.exceptions.ResourceNotFoundException;
 import com.gabriel.api.model.Person;
 import com.gabriel.api.repository.PersonRepository;
-import com.gabriel.api.service.mapper.DozerMapper;
+import com.gabriel.api.service.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,18 +23,18 @@ public class PersonService {
         logger.info("Finding one person!");
         var entity = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-        return DozerMapper.parseObjetc(entity, PersonVO.class);
+        return Mapper.parseObjetc(entity, PersonVO.class);
     }
 
     public List<PersonVO> findAll() {
         logger.info("finding all people");
-        return DozerMapper.parseListObjetc(personRepository.findAll(), PersonVO.class);
+        return Mapper.parseListObjetc(personRepository.findAll(), PersonVO.class);
     }
 
     public PersonVO create(PersonVO personVo) {
         logger.info("Creating person");
-        var entity = DozerMapper.parseObjetc(personVo, Person.class);
-        var vo = DozerMapper.parseObjetc(personRepository.save(entity), PersonVO.class);
+        var entity = Mapper.parseObjetc(personVo, Person.class);
+        var vo = Mapper.parseObjetc(personRepository.save(entity), PersonVO.class);
         return vo;
     }
 
@@ -48,7 +48,7 @@ public class PersonService {
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
 
-        var vo = DozerMapper.parseObjetc(personRepository.save(entity), PersonVO.class);
+        var vo = Mapper.parseObjetc(personRepository.save(entity), PersonVO.class);
         return vo;
     }
 
