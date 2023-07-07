@@ -3,7 +3,7 @@ package com.gabriel.api.unitTests.mapper;
 import com.gabriel.api.data.vo.v1.PersonVO;
 import com.gabriel.api.model.Person;
 import com.gabriel.api.service.mapper.DozerMapper;
-import com.gabriel.api.unitTests.mapper.mocks.MockPerson;
+import com.gabriel.api.unitTests.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

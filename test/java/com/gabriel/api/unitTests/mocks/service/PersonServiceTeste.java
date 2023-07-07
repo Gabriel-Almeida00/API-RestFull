@@ -1,4 +1,4 @@
-package com.gabriel.api.unitTests.mockito.services;
+package com.gabriel.api.unitTests.mocks.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -11,7 +11,7 @@ import com.gabriel.api.exceptions.RequiredObjectIsNullException;
 import com.gabriel.api.model.Person;
 import com.gabriel.api.repository.PersonRepository;
 import com.gabriel.api.service.PersonService;
-import com.gabriel.api.unitTests.mapper.mocks.MockPerson;
+import com.gabriel.api.unitTests.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -21,8 +21,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-
 
 
 @TestInstance(Lifecycle.PER_CLASS)

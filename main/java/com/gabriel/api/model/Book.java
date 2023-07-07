@@ -1,24 +1,25 @@
 package com.gabriel.api.model;
 
 import jakarta.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "books")
-public class Book {
+public class Book implements Serializable {
+    private static final long serialVerionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Column(nullable = false, length = 100)
     private String author;
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date launch_date;
-    @Column(nullable = false, length = 65)
+    @Column(nullable = false)
     private Double price;
     @Column(nullable = false, length = 120)
     private String title;
@@ -26,7 +27,7 @@ public class Book {
     public Book() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

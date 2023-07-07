@@ -11,10 +11,11 @@ import java.util.Objects;
 
 @JsonPropertyOrder({"id", "author", "launch_date", "price", "title"})
 public class BookVO extends RepresentationModel<BookVO> implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Mapping("id")
     @JsonProperty("id")
-    private int key;
+    private Long key;
     private String author;
     private Date launch_date;
     private Double price;
@@ -23,11 +24,11 @@ public class BookVO extends RepresentationModel<BookVO> implements Serializable 
     public BookVO() {
     }
 
-    public int getKey() {
+    public Long getKey() {
         return key;
     }
 
-    public void setKey(int key) {
+    public void setKey(Long key) {
         this.key = key;
     }
 

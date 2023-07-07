@@ -58,7 +58,7 @@ public class BookController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             }
     )
-    public BookVO findById(@PathVariable("id") int id){
+    public BookVO findById(@PathVariable("id") Long id){
         return bookService.findById(id);
     }
 
@@ -97,19 +97,20 @@ public class BookController {
         return bookService.update(bookVO);
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "deletes a book", description = "deletes a book",
+    @DeleteMapping(value = "/{id}")
+    @Operation(summary = "Deletes a Book",
+            description = "Deletes a Book by passing in a JSON, XML or YML representation of the book!",
             tags = {"Book"},
             responses = {
-                    @ApiResponse(description = "No content", responseCode = "204", content = @Content),
+                    @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             }
     )
-    public ResponseEntity<?> delete(@PathVariable("id") int id){
+    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
         bookService.delete(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

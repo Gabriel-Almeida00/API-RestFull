@@ -27,7 +27,7 @@ public class BookService {
         return books;
     }
 
-    public BookVO findById(int id){
+    public BookVO findById(Long id){
         var entity = bookRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
         var vo = DozerMapper.parseObject(entity, BookVO.class);
@@ -58,7 +58,7 @@ public class BookService {
         return vo;
     }
 
-    public void delete(int id){
+    public void delete(Long id){
         var entity = bookRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
         bookRepository.delete(entity);
