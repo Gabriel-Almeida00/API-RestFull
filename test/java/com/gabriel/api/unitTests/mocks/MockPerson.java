@@ -1,4 +1,4 @@
-package com.gabriel.api.unitTests.mapper.mocks;
+package com.gabriel.api.unitTests.mocks;
 
 import com.gabriel.api.data.vo.v1.PersonVO;
 import com.gabriel.api.model.Person;
