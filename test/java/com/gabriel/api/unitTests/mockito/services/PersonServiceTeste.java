@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.gabriel.api.data.vo.v1.PersonVO;
+import com.gabriel.api.exceptions.RequiredObjectIsNullException;
 import com.gabriel.api.model.Person;
 import com.gabriel.api.repository.PersonRepository;
 import com.gabriel.api.service.PersonService;
@@ -93,7 +94,7 @@ class PersonServicesTest {
             service.create(null);
         });
 
-        String expectedMessage = "It is not allowed to persist a null object!";
+        String expectedMessage = "It is not allowed to persist a null object";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
@@ -129,13 +130,13 @@ class PersonServicesTest {
 
 
 
-    @Test
+   @Test
     void testUpdateWithNullPerson() {
         Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
             service.update(null);
         });
 
-        String expectedMessage = "It is not allowed to persist a null object!";
+        String expectedMessage = "It is not allowed to persist a null object";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));

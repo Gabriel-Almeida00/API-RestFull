@@ -1,6 +1,7 @@
 package com.gabriel.api.exceptions.handler;
 
 import com.gabriel.api.exceptions.ExceptionResponse;
+import com.gabriel.api.exceptions.RequiredObjectIsNullException;
 import com.gabriel.api.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +29,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         ExceptionResponse exceptionResponse = new ExceptionResponse(
                 new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RequiredObjectIsNullException.class)
+    public final ResponseEntity<ExceptionResponse> handleBadRequestException(Exception ex, WebRequest request){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }

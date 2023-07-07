@@ -2,6 +2,7 @@ package com.gabriel.api.service;
 
 import com.gabriel.api.controller.PersonController;
 import com.gabriel.api.data.vo.v1.PersonVO;
+import com.gabriel.api.exceptions.RequiredObjectIsNullException;
 import com.gabriel.api.exceptions.ResourceNotFoundException;
 import com.gabriel.api.model.Person;
 import com.gabriel.api.repository.PersonRepository;
@@ -20,6 +21,7 @@ public class PersonService {
     PersonRepository repository;
 
     public PersonVO create(PersonVO person) {
+        if(person == null) throw new RequiredObjectIsNullException();
         var entity = DozerMapper.parseObject(person, Person.class);
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
         vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
@@ -44,6 +46,7 @@ public class PersonService {
     }
 
     public PersonVO update(PersonVO person) {
+        if(person == null) throw new RequiredObjectIsNullException();
         var entity = repository.findById(person.getKey())
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
