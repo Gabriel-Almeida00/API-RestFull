@@ -22,18 +22,23 @@ public class PersonService {
     public PersonVO create(PersonVO person) {
         var entity = DozerMapper.parseObject(person, Person.class);
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+        vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
         return vo;
     }
 
     public List<PersonVO> findAll() {
-        return DozerMapper.parseListObjects(repository.findAll(), PersonVO.class);
+        var persons =  DozerMapper.parseListObjects(repository.findAll(), PersonVO.class);
+        persons
+                .stream()
+                .forEach(p ->  p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
+        return persons;
     }
 
     public PersonVO findById(Long id) {
 
         var entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-        PersonVO vo =  DozerMapper.parseObject(entity, PersonVO.class);
+        var vo =  DozerMapper.parseObject(entity, PersonVO.class);
         vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
         return vo;
     }
@@ -48,6 +53,7 @@ public class PersonService {
         entity.setGender(person.getGender());
 
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+        vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
         return vo;
     }
 
