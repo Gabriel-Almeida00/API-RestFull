@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 @ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class)
 public class AbstractIntegrationTest {
 
-    public class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
         static PostgreSQLContainer postgre = new PostgreSQLContainer("postgres:15.3");
 
         private static void startContainers(){
