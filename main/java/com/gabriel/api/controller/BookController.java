@@ -44,6 +44,7 @@ public class BookController {
         return bookService.findAll();
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(value = "/{id}", produces = {"application/json", "application/xml", "application/x-yaml"})
     @Operation(summary = "Find book by ID", description = "Find book by ID",
             tags = {"Book"},
@@ -62,6 +63,7 @@ public class BookController {
         return bookService.findById(id);
     }
 
+    @CrossOrigin(origins = {"http://localhost:8080","https://erudio.com.br"})
     @PostMapping(produces = {"application/json", "application/xml", "application/x-yaml"},
             consumes = {"application/json", "application/xml", "application/x-yaml"})
     @Operation(summary = "Adds a new book", description = "Adds a new book",
