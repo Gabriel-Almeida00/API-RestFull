@@ -1,6 +1,7 @@
 package com.gabriel.api.exceptions.handler;
 
 import com.gabriel.api.exceptions.ExceptionResponse;
+import com.gabriel.api.exceptions.InvalidJwtAuthenticationException;
 import com.gabriel.api.exceptions.RequiredObjectIsNullException;
 import com.gabriel.api.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -36,5 +37,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         ExceptionResponse exceptionResponse = new ExceptionResponse(
                 new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidJwtAuthenticationException.class)
+    public final ResponseEntity<ExceptionResponse> handleInvalidJwtAuthenticationException(Exception ex, WebRequest request){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
 }
