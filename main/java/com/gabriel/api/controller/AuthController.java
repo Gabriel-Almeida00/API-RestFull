@@ -17,15 +17,15 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+
     @SuppressWarnings("rawtypes")
-    @Operation(summary = "Authenticates a user and return a token")
+    @Operation(summary = "Authenticates a user and returns a token")
     @PostMapping(value = "/signin")
-    public ResponseEntity signin(@RequestBody AccountCredentialsVO data){
-        if(checkIfParamsIsNotNull(data))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid Client Request");
+    public ResponseEntity signin(@RequestBody AccountCredentialsVO data) {
+        if (checkIfParamsIsNotNull(data))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
         var token = authService.signin(data);
-        if(token == null)
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid Client Request");
+        if (token == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
         return token;
     }
 
@@ -42,13 +42,13 @@ public class AuthController {
         return token;
     }
 
-    private boolean checkIfParamsIsNotNull(AccountCredentialsVO data){
-        return data == null || data.getUsername() == null || data.getUsername().isBlank()
-                || data.getPasswod() == null || data.getPasswod().isEmpty();
-    }
-
-    private boolean checkIfParamsIsNotNull(String username, String refreshToken){
+    private boolean checkIfParamsIsNotNull(String username, String refreshToken) {
         return refreshToken == null || refreshToken.isBlank() ||
                 username == null || username.isBlank();
+    }
+
+    private boolean checkIfParamsIsNotNull(AccountCredentialsVO data) {
+        return data == null || data.getUsername() == null || data.getUsername().isBlank()
+                || data.getPassword() == null || data.getPassword().isBlank();
     }
 }

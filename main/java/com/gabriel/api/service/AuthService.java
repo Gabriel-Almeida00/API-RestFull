@@ -28,21 +28,21 @@ public class AuthService {
     public ResponseEntity signin(AccountCredentialsVO data) {
         try {
             var username = data.getUsername();
-            var password = data.getPasswod();
+            var password = data.getPassword();
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
 
             var user = userRepository.findByUserName(username);
-            var tokenResponse = new TokenVO();
 
+            var tokenResponse = new TokenVO();
             if (user != null) {
                 tokenResponse = tokenProvider.createAccessToken(username, user.getRoles());
             } else {
-                throw new UsernameNotFoundException("Username " + username + "not found");
+                throw new UsernameNotFoundException("Username " + username + " not found!");
             }
             return ResponseEntity.ok(tokenResponse);
         } catch (Exception e) {
-            throw new BadCredentialsException("Invalid username/password supplied");
+            throw new BadCredentialsException("Invalid username/password supplied!");
         }
     }
 

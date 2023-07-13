@@ -173,8 +173,8 @@ CREATE TABLE IF NOT EXISTS users (
 )  ;
 
 INSERT INTO users (user_name, full_name, password, account_non_expired, account_non_locked, credentials_non_expired, enabled) VALUES
-	('leandro', 'Leandro Costa', '$2a$16$9qr2tv0HmXbHBsx.TZFjfux742wCZM32a8Wi6iBqwIqaizlHPuxHS', TRUE, TRUE, TRUE, TRUE),
-	('flavio', 'Flavio Costa', '$2a$16$h4yDQCYTy62R6xrtFDWONeMH3Lim4WQuU/aj8hxW.dJJoeyvtEkhK', TRUE, TRUE, TRUE, TRUE);
+	('leandro', 'Leandro Costa', '5ec9211ccdb5fcd7413dba9081e97b08e560ebac88e4790915cd0e7978354afc08e4f032739f78ae', TRUE, TRUE, TRUE, TRUE),
+	('flavio', 'Flavio Costa', '8f47c20433fb76207cb2065386613280254a76828878b79f655ef86def80dfd4c79ebe119764d791', TRUE, TRUE, TRUE, TRUE);
 	
 ALTER SEQUENCE users_seq RESTART WITH 3;
 
