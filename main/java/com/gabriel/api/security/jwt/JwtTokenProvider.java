@@ -49,6 +49,17 @@ public class JwtTokenProvider {
         return new TokenVO(username, true, now, validaty, accessToken, refreshToken);
     }
 
+    public TokenVO refreshToken(String refreshToken){
+        if(refreshToken.contains("Bearer ")) refreshToken =
+                refreshToken.substring("Bearer ".length());
+
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT decodedJWT = verifier.verify(refreshToken);
+        String username = decodedJWT.getSubject();
+        List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
+        return createAccessToken(username, roles);
+    }
+
     private String getRefreshToken(String username, List<String> roles, Date now) {
         Date validatyRefreshToken = new Date(now.getTime() + validtyInMilliseconds * 3);
         return JWT.create()
@@ -90,7 +101,8 @@ public class JwtTokenProvider {
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring("Bearer ".length());
+            String token = bearerToken.substring("Bearer ".length());
+            return token;
         }
         return null;
     }
