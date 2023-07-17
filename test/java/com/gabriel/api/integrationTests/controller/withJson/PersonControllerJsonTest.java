@@ -1,7 +1,9 @@
 package com.gabriel.api.integrationTests.controller.withJson;
 
 import com.gabriel.api.configs.TestsConfig;
+import com.gabriel.api.integrationTests.vo.AccountCredentialsVO;
 import com.gabriel.api.integrationTests.vo.PersonVO;
+import com.gabriel.api.integrationTests.vo.TokenVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -33,20 +35,42 @@ public class PersonControllerJsonTest {
     }
 
     @Test
-    @Order(1)
-    public void testCreate() throws IOException {
-        mockPerson();
+    @Order(0)
+    public void authoriztion() throws IOException {
+        AccountCredentialsVO user = new AccountCredentialsVO("leandro","admin234");
+
+        var accessToken = given()
+                .basePath("/auth/signin")
+                .port(TestsConfig.SERVER_PORT)
+                .contentType(TestsConfig.CONTENT_TYPE_JSON)
+                .body(user)
+                .when()
+                .post()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(TokenVO.class)
+                .getAccessToken();
 
         specification = new RequestSpecBuilder()
-                .addHeader(TestsConfig.HEADER_PARAM_ORIGIN, TestsConfig.ORIGIN_ERUDIO)
+                .addHeader(TestsConfig.HEADER_PARAM_AUTHORIZATION, "Bearer " + accessToken)
                 .setBasePath("/api/person/v1")
                 .setPort(TestsConfig.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
                 .build();
 
+    }
+
+    @Test
+    @Order(1)
+    public void testCreate() throws IOException {
+        mockPerson();
+
         var content = given().spec(specification)
                 .contentType(TestsConfig.CONTENT_TYPE_JSON)
+                .header(TestsConfig.HEADER_PARAM_ORIGIN, TestsConfig.ORIGIN_ERUDIO)
                 .body(personVO)
                 .when()
                 .post()
@@ -80,16 +104,9 @@ public class PersonControllerJsonTest {
     public void testCreateWhiteWrongOrigin() throws IOException {
         mockPerson();
 
-        specification = new RequestSpecBuilder()
-                .addHeader(TestsConfig.HEADER_PARAM_ORIGIN, TestsConfig.ORIGIN_SEMERU)
-                .setBasePath("/api/person/v1")
-                .setPort(TestsConfig.SERVER_PORT)
-                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-                .build();
-
         var content = given().spec(specification)
                 .contentType(TestsConfig.CONTENT_TYPE_JSON)
+                .header(TestsConfig.HEADER_PARAM_ORIGIN, TestsConfig.ORIGIN_SEMERU)
                 .body(personVO)
                 .when()
                 .post()
@@ -108,17 +125,10 @@ public class PersonControllerJsonTest {
     @Order(3)
     public void testFindById() throws IOException {
         mockPerson();
-
-        specification = new RequestSpecBuilder()
-                .addHeader(TestsConfig.HEADER_PARAM_ORIGIN, TestsConfig.ORIGIN_ERUDIO)
-                .setBasePath("/api/person/v1")
-                .setPort(TestsConfig.SERVER_PORT)
-                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-                .build();
-
+        
         var content = given().spec(specification)
                 .contentType(TestsConfig.CONTENT_TYPE_JSON)
+                .header(TestsConfig.HEADER_PARAM_ORIGIN, TestsConfig.ORIGIN_ERUDIO)
                 .pathParams("id",personVO.getId())
                 .when()
                 .get("{id}")
@@ -153,16 +163,9 @@ public class PersonControllerJsonTest {
     public void testFindByIdWithWrongOrigin() throws IOException {
         mockPerson();
 
-        specification = new RequestSpecBuilder()
-                .addHeader(TestsConfig.HEADER_PARAM_ORIGIN, TestsConfig.ORIGIN_SEMERU)
-                .setBasePath("/api/person/v1")
-                .setPort(TestsConfig.SERVER_PORT)
-                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-                .build();
-
         var content = given().spec(specification)
                 .contentType(TestsConfig.CONTENT_TYPE_JSON)
+                .header(TestsConfig.HEADER_PARAM_ORIGIN, TestsConfig.ORIGIN_SEMERU)
                 .pathParams("id",personVO.getId())
                 .when()
                 .get("{id}")
