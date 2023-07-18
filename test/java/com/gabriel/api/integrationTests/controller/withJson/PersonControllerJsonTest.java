@@ -1,6 +1,7 @@
 package com.gabriel.api.integrationTests.controller.withJson;
 
 import com.gabriel.api.configs.TestsConfig;
+import com.gabriel.api.integrationTests.testContainers.AbstractIntegrationTest;
 import com.gabriel.api.integrationTests.vo.AccountCredentialsVO;
 import com.gabriel.api.integrationTests.vo.PersonVO;
 import com.gabriel.api.integrationTests.vo.TokenVO;
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PersonControllerJsonTest {
+public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
@@ -125,7 +126,7 @@ public class PersonControllerJsonTest {
     @Order(3)
     public void testFindById() throws IOException {
         mockPerson();
-        
+
         var content = given().spec(specification)
                 .contentType(TestsConfig.CONTENT_TYPE_JSON)
                 .header(TestsConfig.HEADER_PARAM_ORIGIN, TestsConfig.ORIGIN_ERUDIO)
