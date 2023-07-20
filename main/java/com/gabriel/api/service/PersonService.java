@@ -60,7 +60,7 @@ public class PersonService {
         vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
         return vo;
     }
-    
+
     @Transactional
     public PersonVO disablePerson(Long id) {
         repository.disablePerson(id);
