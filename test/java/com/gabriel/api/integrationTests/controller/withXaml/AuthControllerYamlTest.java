@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AuthControllerXamlTest extends AbstractIntegrationTest {
+public class AuthControllerYamlTest extends AbstractIntegrationTest {
 
     public static TokenVO tokenVO;
     private static YamlMapper yamlMapper;
