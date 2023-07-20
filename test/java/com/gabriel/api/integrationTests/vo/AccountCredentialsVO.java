@@ -32,14 +32,14 @@ public class AccountCredentialsVO implements Serializable {
         return password;
     }
 
-    public void setPassword(String passwod) {
-        this.password = passwod;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AccountCredentialsVO that)) return false;
+        if (!(o instanceof com.gabriel.api.data.vo.v1.security.AccountCredentialsVO that)) return false;
         return Objects.equals(getUsername(), that.getUsername()) && Objects.equals(getPassword(), that.getPassword());
     }
 
