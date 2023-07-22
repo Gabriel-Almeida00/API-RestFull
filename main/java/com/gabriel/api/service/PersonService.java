@@ -8,12 +8,13 @@ import com.gabriel.api.model.Person;
 import com.gabriel.api.repository.PersonRepository;
 import com.gabriel.api.service.mapper.DozerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class PersonService {
@@ -22,32 +23,32 @@ public class PersonService {
     PersonRepository repository;
 
     public PersonVO create(PersonVO person) {
-        if(person == null) throw new RequiredObjectIsNullException();
+        if (person == null) throw new RequiredObjectIsNullException();
         var entity = DozerMapper.parseObject(person, Person.class);
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
         vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
         return vo;
     }
 
-    public List<PersonVO> findAll() {
-        var persons =  DozerMapper.parseListObjects(repository.findAll(), PersonVO.class);
-        persons
-                .stream()
-                .forEach(p ->  p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
-        return persons;
+    public Page<PersonVO> findAll(Pageable pageable) {
+        var personPage = repository.findAll(pageable);
+        var personVoPage = personPage.map(p -> DozerMapper.parseObject(p, PersonVO.class));
+        personVoPage.map(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
+
+        return personVoPage;
     }
 
     public PersonVO findById(Long id) {
 
         var entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-        var vo =  DozerMapper.parseObject(entity, PersonVO.class);
+        var vo = DozerMapper.parseObject(entity, PersonVO.class);
         vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
         return vo;
     }
 
     public PersonVO update(PersonVO person) {
-        if(person == null) throw new RequiredObjectIsNullException();
+        if (person == null) throw new RequiredObjectIsNullException();
         var entity = repository.findById(person.getKey())
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
@@ -66,7 +67,7 @@ public class PersonService {
         repository.disablePerson(id);
         var entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-        var vo =  DozerMapper.parseObject(entity, PersonVO.class);
+        var vo = DozerMapper.parseObject(entity, PersonVO.class);
         vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
         return vo;
     }
