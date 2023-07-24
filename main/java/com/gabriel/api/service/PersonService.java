@@ -8,8 +8,11 @@ import com.gabriel.api.model.Person;
 import com.gabriel.api.repository.PersonRepository;
 import com.gabriel.api.service.mapper.DozerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +25,9 @@ public class PersonService {
     @Autowired
     PersonRepository repository;
 
+    @Autowired
+    PagedResourcesAssembler<PersonVO> assembler;
+
     public PersonVO create(PersonVO person) {
         if (person == null) throw new RequiredObjectIsNullException();
         var entity = DozerMapper.parseObject(person, Person.class);
@@ -30,12 +36,24 @@ public class PersonService {
         return vo;
     }
 
-    public Page<PersonVO> findAll(Pageable pageable) {
-        var personPage = repository.findAll(pageable);
-        var personVoPage = personPage.map(p -> DozerMapper.parseObject(p, PersonVO.class));
-        personVoPage.map(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
+    public PagedModel<EntityModel<PersonVO>> findAll(Pageable pageable) {
 
-        return personVoPage;
+
+        var personPage = repository.findAll(pageable);
+
+        var personVosPage = personPage.map(p -> DozerMapper.parseObject(p, PersonVO.class));
+        personVosPage.map(
+                p -> p.add(
+                        linkTo(methodOn(PersonController.class)
+                                .findById(p.getKey())).withSelfRel()));
+
+        Link link = linkTo(
+                methodOn(PersonController.class)
+                        .findAll(pageable.getPageNumber(),
+                                pageable.getPageSize(),
+                                "asc")).withSelfRel();
+
+        return assembler.toModel(personVosPage, link);
     }
 
     public PersonVO findById(Long id) {
