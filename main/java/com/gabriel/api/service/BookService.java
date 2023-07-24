@@ -8,6 +8,11 @@ import com.gabriel.api.model.Book;
 import com.gabriel.api.repository.BookRepository;
 import com.gabriel.api.service.mapper.DozerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +26,22 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public List<BookVO> findAll(){
-        var books = DozerMapper.parseListObjects(bookRepository.findAll(), BookVO.class);
-        books.stream().forEach(p -> p.add(linkTo(methodOn(BookController.class).findById(p.getKey())).withSelfRel()));
-        return books;
+    @Autowired
+    PagedResourcesAssembler<BookVO> assembler;
+
+    public PagedModel<EntityModel<BookVO>> findAll(Pageable pageable){
+        var booksPage = bookRepository.findAll(pageable);
+
+        var booksVOs = booksPage.map(p -> DozerMapper.parseObject(p, BookVO.class));
+        booksVOs.map(p -> p.add(linkTo(methodOn(BookController.class).findById(p.getKey())).withSelfRel()));
+
+        Link findAllLink = linkTo(
+                methodOn(BookController.class)
+                        .findAll(pageable.getPageNumber(),
+                                pageable.getPageSize(),
+                                "asc")).withSelfRel();
+
+        return assembler.toModel(booksVOs, findAllLink);
     }
 
     public BookVO findById(Long id){
