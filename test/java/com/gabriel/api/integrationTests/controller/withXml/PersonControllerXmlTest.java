@@ -10,6 +10,7 @@ import com.gabriel.api.integrationTests.testContainers.AbstractIntegrationTest;
 import com.gabriel.api.integrationTests.vo.AccountCredentialsVO;
 import com.gabriel.api.integrationTests.vo.PersonVO;
 import com.gabriel.api.integrationTests.vo.TokenVO;
+import com.gabriel.api.integrationTests.vo.wrappers.WrapperPersonVO;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -250,7 +251,8 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
                 .body()
                 .asString();
 
-        List<PersonVO> people = objectMapper.readValue(content, new TypeReference<List<PersonVO>>() {});
+        WrapperPersonVO wrapper = objectMapper.readValue(content, WrapperPersonVO.class);
+        var people = wrapper.getEmbedded().getPersons();
 
         PersonVO foundPersonOne = people.get(0);
 
