@@ -12,6 +12,7 @@ import com.gabriel.api.integrationTests.testContainers.AbstractIntegrationTest;
 import com.gabriel.api.integrationTests.vo.AccountCredentialsVO;
 import com.gabriel.api.integrationTests.vo.PersonVO;
 import com.gabriel.api.integrationTests.vo.TokenVO;
+import com.gabriel.api.integrationTests.vo.wrappers.WrapperPersonVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.RestAssuredConfig;
@@ -272,7 +273,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
     @Order(6)
     public void testFindAll() throws JsonMappingException, JsonProcessingException {
 
-        var content = given().spec(specification)
+        var wrapper = given().spec(specification)
                 .config(RestAssuredConfig.config()
                         .encoderConfig(EncoderConfig.encoderConfig()
                                 .encodeContentTypeAs(
@@ -287,10 +288,9 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(PersonVO[].class, objectMapper);
+                .as(WrapperPersonVO.class, objectMapper);
 
-        List<PersonVO> people = Arrays.asList(content);
-
+        var people = wrapper.getEmbedded().getPersons();
         PersonVO foundPersonOne = people.get(0);
 
         assertNotNull(foundPersonOne.getId());
