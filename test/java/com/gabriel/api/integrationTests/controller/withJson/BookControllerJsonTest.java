@@ -11,6 +11,7 @@ import com.gabriel.api.integrationTests.testContainers.AbstractIntegrationTest;
 import com.gabriel.api.integrationTests.vo.AccountCredentialsVO;
 import com.gabriel.api.integrationTests.vo.BookVO;
 import com.gabriel.api.integrationTests.vo.TokenVO;
+import com.gabriel.api.integrationTests.vo.wrappers.WrapperBookVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -185,7 +186,8 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
                 .body()
                 .asString();
 
-        List<BookVO> books = objectMapper.readValue(content, new TypeReference<List<BookVO>>() {});
+        WrapperBookVO wrapper = objectMapper.readValue(content, WrapperBookVO.class);
+        List<BookVO> books = wrapper.getEmbedded().getBooks();
 
         BookVO foundBookOne = books.get(0);
 
@@ -194,9 +196,9 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(foundBookOne.getAuthor());
         assertNotNull(foundBookOne.getPrice());
         assertTrue(foundBookOne.getId() > 0);
-        assertEquals("Working effectively with legacy code", foundBookOne.getTitle());
-        assertEquals("Michael C. Feathers", foundBookOne.getAuthor());
-        assertEquals(49.00, foundBookOne.getPrice());
+        assertEquals("Big Data: como extrair volume, variedade, velocidade e valor da avalanche de informação cotidiana", foundBookOne.getTitle());
+        assertEquals("Viktor Mayer-Schonberger e Kenneth Kukier", foundBookOne.getAuthor());
+        assertEquals(54.00, foundBookOne.getPrice());
 
         BookVO foundBookFive = books.get(4);
 
@@ -205,9 +207,9 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(foundBookFive.getAuthor());
         assertNotNull(foundBookFive.getPrice());
         assertTrue(foundBookFive.getId() > 0);
-        assertEquals("Code complete", foundBookFive.getTitle());
-        assertEquals("Steve McConnell", foundBookFive.getAuthor());
-        assertEquals(58.0, foundBookFive.getPrice());
+        assertEquals("Domain Driven Design", foundBookFive.getTitle());
+        assertEquals("Eric Evans", foundBookFive.getAuthor());
+        assertEquals(92.0, foundBookFive.getPrice());
     }
 
     private void mockBook() {
