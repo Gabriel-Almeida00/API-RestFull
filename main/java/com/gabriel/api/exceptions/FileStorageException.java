@@ -4,14 +4,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public class FailStorageException extends RuntimeException {
+public class FileStorageException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public FailStorageException(String message) {
+    public FileStorageException(String message) {
         super(message);
     }
 
-    public FailStorageException(String message, Throwable cause) {
+    public FileStorageException(String message, Throwable cause) {
         super(message, cause);
     }
 }
